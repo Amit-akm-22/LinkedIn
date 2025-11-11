@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
-  withCredentials: true, // This sends cookies automatically
+  // Backend Render API base URL
+  baseURL: import.meta.env.VITE_API_URL || "https://linkedin-backend-k3cs.onrender.com/api/v1",
+  withCredentials: true, // Include cookies for auth
 });
-
-// Remove the token interceptor since we're using cookies now
-// The browser will automatically send the httpOnly cookie with every request
