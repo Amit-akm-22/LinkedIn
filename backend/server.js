@@ -25,47 +25,46 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
-// ✅ Ensure upload directories exist
-const uploadDirs = ["uploads", "uploads/companies", "uploads/resumes"];
-uploadDirs.forEach((dir) => {
+// ✅ Ensure upload folders exist
+["uploads", "uploads/companies", "uploads/resumes"].forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
-    console.log(`📁 Created directory: ${dir}`);
+    console.log(`📁 Created folder: ${dir}`);
   }
 });
 
-// ✅ Create HTTP server
+// ✅ Create server
 const server = http.createServer(app);
 
-// ✅ Initialize Socket.IO with CORS
+// ✅ Configure allowed origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://linked-in-frontend-six.vercel.app", // your Vercel frontend
+];
+
+// ✅ Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://linked-in-frontend-six.vercel.app", // ✅ Your deployed frontend
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
-// ✅ Store active users: { userId: socketId }
+// ✅ Track active users
 const activeUsers = new Map();
 
-// ✅ SOCKET.IO EVENTS
 io.on("connection", (socket) => {
-  console.log("🟢 New client connected:", socket.id);
+  console.log("🟢 Client connected:", socket.id);
 
   socket.on("user-online", (userId) => {
     activeUsers.set(userId, socket.id);
-    console.log(`✅ User ${userId} is online`);
     io.emit("user-status", { userId, status: "online" });
   });
 
   socket.on("join-chat", ({ senderId, receiverId }) => {
     const roomId = [senderId, receiverId].sort().join("-");
     socket.join(roomId);
-    console.log(`💬 User ${senderId} joined room ${roomId}`);
   });
 
   socket.on("send-message", async ({ senderId, receiverId, message }) => {
@@ -87,9 +86,9 @@ io.on("connection", (socket) => {
           message,
         });
       }
-    } catch (error) {
-      console.error("❌ Error sending message:", error);
-      socket.emit("error", { message: "Failed to send message" });
+    } catch (err) {
+      console.error("❌ Message error:", err);
+      socket.emit("error", { message: "Message failed" });
     }
   });
 
@@ -113,13 +112,12 @@ io.on("connection", (socket) => {
         { senderId: receiverId, receiverId: senderId, read: false },
         { read: true }
       );
-
       const receiverSocketId = activeUsers.get(receiverId);
       if (receiverSocketId) {
         io.to(receiverSocketId).emit("messages-read", { readBy: senderId });
       }
-    } catch (error) {
-      console.error("❌ Error marking messages as read:", error);
+    } catch (err) {
+      console.error("❌ Read status error:", err);
     }
   });
 
@@ -135,16 +133,13 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ Make io accessible in routes
+// ✅ Expose io globally (for routes)
 app.set("io", io);
 
-// ✅ CORS setup for Express
+// ✅ CORS middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://linked-in-frontend-six.vercel.app", // ✅ Your Vercel frontend
-    ],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -152,8 +147,6 @@ app.use(
 // ✅ Middlewares
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
-
-// ✅ Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ✅ API Routes
@@ -169,7 +162,7 @@ app.use("/api/v1/applications", applicationRoutes);
 // ✅ Optional alias
 app.use("/auth", authRoutes);
 
-// ✅ Serve frontend in production
+// ✅ Serve frontend build (optional for local full-stack build)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
   app.get("*", (req, res) => {
@@ -182,5 +175,6 @@ server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   connectDB();
 });
+
 
 
