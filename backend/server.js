@@ -155,12 +155,13 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://linked-in-sooty.vercel.app",
+      "https://linked-in-7gc7.vercel.app",  // ✅ add this
       "https://linkedin-backend-f1os.onrender.com",
     ],
     credentials: true,
   })
 );
+
 
 // ✅ Middlewares
 app.use(express.json({ limit: "5mb" }));
