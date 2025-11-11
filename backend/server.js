@@ -139,10 +139,15 @@ app.set("io", io);
 // ✅ CORS middleware
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [
+      "http://localhost:5173", // For local testing
+      "https://linked-in-frontend-six.vercel.app", // ✅ Your Vercel frontend
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
 
 // ✅ Middlewares
 app.use(express.json({ limit: "5mb" }));
