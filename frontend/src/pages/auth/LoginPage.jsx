@@ -1,23 +1,26 @@
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      await axiosInstance.post(
-        "/auth/login",
-        { username, password },
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/auth/login", { username, password });
+      
+      // Cookie is automatically set by the backend
+      // Invalidate auth query to refetch user data
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      
       toast.success("Logged in successfully!");
       window.location.href = "/";
     } catch (err) {
@@ -258,7 +261,7 @@ const LoginPage = () => {
                 Welcome back
               </h2>
               <p className="text-sm text-gray-600 font-medium">
-                Sign in to continue to your professional network
+                Login to continue to your professional network
               </p>
             </div>
 

@@ -1,3 +1,4 @@
+// App.jsx
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 
@@ -11,8 +12,14 @@ import NotificationsPage from "./pages/NotificationsPage";
 import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
+import MessagingPage from "./pages/MessagingPage";
 
-
+// ✅ Import Job Components
+import JobsPage from "./pages/JobsPage";
+import JobDetailsPage from "./pages/JobDetailsPage";
+import PostJobPage from "./pages/PostJobPage";
+import ApplicationsPage from "./pages/ApplicationPage";
+import MyPostedJobsPage from "./pages/MyPostedJobsPage";
 
 function App() {
 	const { data: authUser, isLoading } = useQuery({
@@ -42,6 +49,14 @@ function App() {
 				<Route path='/network' element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />} />
 				<Route path='/post/:postId' element={authUser ? <PostPage /> : <Navigate to={"/login"} />} />
 				<Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
+				<Route path='/messaging' element={authUser ? <MessagingPage /> : <Navigate to={"/login"} />} />
+				
+				{/* ✅ Job Routes */}
+				<Route path='/jobs' element={authUser ? <JobsPage /> : <Navigate to={"/login"} />} />
+				<Route path='/jobs/:id' element={authUser ? <JobDetailsPage /> : <Navigate to={"/login"} />} />
+				<Route path='/jobs/post' element={authUser ? <PostJobPage /> : <Navigate to={"/login"} />} />
+				<Route path='/my-applications' element={authUser ? <ApplicationsPage /> : <Navigate to={"/login"} />} />
+				<Route path='/my-posted-jobs' element={authUser ? <MyPostedJobsPage /> : <Navigate to={"/login"} />} />
 			</Routes>
 			<Toaster />
 		</Layout>

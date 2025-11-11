@@ -152,7 +152,7 @@ const SignUpPage = () => {
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 
                 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
               <span className="flex items-center space-x-1.5">
-                <span>Sign in</span>
+                <span>Login in</span>
                 <svg className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

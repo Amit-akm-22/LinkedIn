@@ -103,11 +103,11 @@ const LoginForm = () => {
           {isLoading ? (
             <div className="flex items-center space-x-2">
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Signing in...</span>
+              <span>Loging in...</span>
             </div>
           ) : (
-            "Sign in"
-          )}
+            "Loginbdhfh"
+          )} Login 
         </button>
       </div>
     </form>

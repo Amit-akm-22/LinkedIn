@@ -1,7 +1,22 @@
+
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
-import { Bell, Home, LogOut, User, Users, MessageSquare, Briefcase, Search } from "lucide-react";
+import { 
+  Bell, 
+  Home, 
+  LogOut, 
+  User, 
+  Users, 
+  MessageSquare, 
+  Briefcase, 
+  Search, 
+  Plus,        // ✅ add this
+  FileText,    // ✅ add this
+  List         // ✅ add this
+} from "lucide-react";
+
 
 const Navbar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -127,7 +142,7 @@ const Navbar = () => {
                   to="/login" 
                   className="text-sm text-gray-700 hover:text-blue-600 font-semibold transition-all duration-300 px-4 py-2 rounded-xl hover:bg-blue-50/50 relative group overflow-hidden"
                 >
-                  <span className="relative z-10">Sign In</span>
+                  <span className="relative z-10">LogIn</span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-100/50 to-blue-50/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                 </Link>
                 <Link 
@@ -142,12 +157,15 @@ const Navbar = () => {
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                 </Link>
+
+
+
               </>
             )}
           </div>
         </div>
       </div>
-    </nav>
+    </nav>                
   );
 };
 

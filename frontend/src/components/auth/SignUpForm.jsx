@@ -18,11 +18,16 @@ const SignUpForm = () => {
       return res.data;
     },
     onSuccess: () => {
+      // Cookie is automatically set by the backend
+      // No need to manually handle tokens
       toast.success("Account created successfully");
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      
+      // Redirect to home
+      window.location.href = "/";
     },
     onError: (err) => {
-      toast.error(err.response.data.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong");
     },
   });
 
