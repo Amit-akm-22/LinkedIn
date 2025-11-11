@@ -6,9 +6,19 @@ import io from "socket.io-client";
 import { X, Search } from "lucide-react";
 
 // Initialize socket connection
-const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+// ✅ MessagingPage.jsx (Fixed socket config)
+import io from "socket.io-client";
+
+// Choose the correct backend URL based on environment
+const SOCKET_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000" // local development
+    : "https://linkedin-backend-k3cs.onrender.com"; // Render backend
+
+const socket = io(SOCKET_URL, {
   withCredentials: true,
 });
+
 
 const MessagingPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
