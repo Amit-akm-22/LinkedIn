@@ -15,10 +15,11 @@ const SOCKET_URL =
     ? "http://localhost:5000" // local development
     : "https://linkedin-backend-k3cs.onrender.com"; // Render backend
 
-const socket = io(SOCKET_URL, {
-  withCredentials: true,
-});
 
+const socket = io("https://linkedin-backend-k3cs.onrender.com", {
+  withCredentials: true,
+  transports: ["websocket", "polling"]
+});
 
 const MessagingPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
