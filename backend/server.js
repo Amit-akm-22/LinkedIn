@@ -42,9 +42,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
-      "https://linked-in-7gc7.vercel.app",
-      "https://linkedin-backend-f1os.onrender.com"
+      "https://linked-in-frontend-six.vercel.app", // ✅ Your deployed frontend
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -58,21 +56,18 @@ const activeUsers = new Map();
 io.on("connection", (socket) => {
   console.log("🟢 New client connected:", socket.id);
 
-  // When user comes online
   socket.on("user-online", (userId) => {
     activeUsers.set(userId, socket.id);
     console.log(`✅ User ${userId} is online`);
     io.emit("user-status", { userId, status: "online" });
   });
 
-  // Join chat room
   socket.on("join-chat", ({ senderId, receiverId }) => {
     const roomId = [senderId, receiverId].sort().join("-");
     socket.join(roomId);
     console.log(`💬 User ${senderId} joined room ${roomId}`);
   });
 
-  // Send message
   socket.on("send-message", async ({ senderId, receiverId, message }) => {
     try {
       const roomId = [senderId, receiverId].sort().join("-");
@@ -98,7 +93,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Typing indicator
   socket.on("typing", ({ senderId, receiverId }) => {
     const receiverSocketId = activeUsers.get(receiverId);
     if (receiverSocketId) {
@@ -113,7 +107,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Mark messages as read
   socket.on("mark-read", async ({ senderId, receiverId }) => {
     try {
       await Message.updateMany(
@@ -130,7 +123,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // On disconnect
   socket.on("disconnect", () => {
     for (let [userId, socketId] of activeUsers.entries()) {
       if (socketId === socket.id) {
@@ -151,9 +143,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
-      "https://linked-in-7gc7.vercel.app",
-      "https://linkedin-backend-f1os.onrender.com",
+      "https://linked-in-frontend-six.vercel.app", // ✅ Your Vercel frontend
     ],
     credentials: true,
   })
@@ -176,7 +166,7 @@ app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/jobs", jobRoutes);
 app.use("/api/v1/applications", applicationRoutes);
 
-// ✅ Optional: Alias for simpler auth path (avoids 404 on /auth/me)
+// ✅ Optional alias
 app.use("/auth", authRoutes);
 
 // ✅ Serve frontend in production
@@ -192,4 +182,5 @@ server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   connectDB();
 });
+
 
