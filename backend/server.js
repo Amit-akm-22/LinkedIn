@@ -43,7 +43,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://linked-in-sooty.vercel.app",
+      "linked-in-7gc7.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
