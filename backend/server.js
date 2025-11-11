@@ -155,6 +155,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "https://linked-in-sooty.vercel.app",
+      "https://linkedin-backend-f1os.onrender.com",
     ],
     credentials: true,
   })
