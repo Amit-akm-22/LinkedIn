@@ -37,13 +37,12 @@ uploadDirs.forEach((dir) => {
 // ✅ Create HTTP server
 const server = http.createServer(app);
 
-// ✅ Initialize Socket.IO with clean CORS
+// ✅ Initialize Socket.IO with CORS
 const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "linked-in-7gc7.vercel.app",
       "https://linked-in-7gc7.vercel.app",
       "https://linkedin-backend-f1os.onrender.com"
     ],
@@ -84,10 +83,8 @@ io.on("connection", (socket) => {
         timestamp: new Date(),
       };
 
-      // Send message to both users in room
       io.to(roomId).emit("receive-message", messageData);
 
-      // Notify receiver if online
       const receiverSocketId = activeUsers.get(receiverId);
       if (receiverSocketId) {
         io.to(receiverSocketId).emit("new-message-notification", {
@@ -149,19 +146,18 @@ io.on("connection", (socket) => {
 // ✅ Make io accessible in routes
 app.set("io", io);
 
-// ✅ Express CORS setup
+// ✅ CORS setup for Express
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://linked-in-7gc7.vercel.app",  // ✅ add this
+      "https://linked-in-7gc7.vercel.app",
       "https://linkedin-backend-f1os.onrender.com",
     ],
     credentials: true,
   })
 );
-
 
 // ✅ Middlewares
 app.use(express.json({ limit: "5mb" }));
@@ -180,6 +176,9 @@ app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/jobs", jobRoutes);
 app.use("/api/v1/applications", applicationRoutes);
 
+// ✅ Optional: Alias for simpler auth path (avoids 404 on /auth/me)
+app.use("/auth", authRoutes);
+
 // ✅ Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
@@ -193,3 +192,4 @@ server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   connectDB();
 });
+
