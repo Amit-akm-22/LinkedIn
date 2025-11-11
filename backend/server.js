@@ -45,7 +45,10 @@ const allowedOrigins = [
 // ✅ Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: [
+      "http://localhost:5173",
+      "https://linked-in-frontend-six.vercel.app", // ✅ Match exactly
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
