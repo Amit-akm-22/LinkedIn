@@ -26,7 +26,7 @@ function App() {
 		queryKey: ["authUser"],
 		queryFn: async () => {
 			try {
-				const res = await axiosInstance.get("/api/v1/auth/me");
+				const res = await axiosInstance.get("/auth/me");
 
 				return res.data;
 			} catch (err) {
