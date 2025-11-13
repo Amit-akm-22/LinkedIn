@@ -39,16 +39,37 @@ const server = http.createServer(app);
 // ✅ Configure allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://linked-in-frontend-2026.vercel.app", // your Vercel frontend
+  "https://linked-in-frontend-2026.vercel.app",
 ];
+
+// ✅ CORS middleware - MUST BE BEFORE ROUTES
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ CORS blocked origin:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
+  })
+);
+
+// ✅ Handle preflight requests
+app.options("*", cors());
 
 // ✅ Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://linked-in-frontend-2026.vercel.app", // ✅ Match exactly
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -139,21 +160,7 @@ io.on("connection", (socket) => {
 // ✅ Expose io globally (for routes)
 app.set("io", io);
 
-// ✅ CORS middleware
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://linked-in-frontend-2026.vercel.app", // ✅ NO trailing slash
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // ✅ Essential for cookies
-  })
-);
-
-
-// ✅ Middlewares
+// ✅ Other Middlewares
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -168,8 +175,13 @@ app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/jobs", jobRoutes);
 app.use("/api/v1/applications", applicationRoutes);
 
-// ✅ Optional alias
+// ✅ Optional alias (if needed)
 app.use("/auth", authRoutes);
+
+// ✅ Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
+});
 
 // ✅ Serve frontend build (optional for local full-stack build)
 if (process.env.NODE_ENV === "production") {
@@ -179,8 +191,18 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// ✅ Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("❌ Server Error:", err);
+  res.status(500).json({ 
+    success: false, 
+    message: err.message || "Internal Server Error" 
+  });
+});
+
 // ✅ Start server + connect DB
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`✅ CORS enabled for: ${allowedOrigins.join(", ")}`);
   connectDB();
 });
