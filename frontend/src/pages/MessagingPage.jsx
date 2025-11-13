@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
-import io from "socket.io-client"; // ✅ Keep only this import
+import io from "socket.io-client";
 import { X, Search } from "lucide-react";
 
 // ✅ Choose the correct backend URL based on environment
@@ -17,7 +17,6 @@ const socket = io(SOCKET_URL, {
   transports: ["websocket", "polling"],
 });
 
-
 const MessagingPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -31,21 +30,29 @@ const MessagingPage = () => {
   // Get current user
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
-  // Get all conversations
+  // ✅ FIX: Get all conversations with proper data handling
   const { data: conversations, refetch: refetchConversations } = useQuery({
     queryKey: ["conversations"],
     queryFn: async () => {
       const res = await axiosInstance.get("/messages/conversations/all");
-      return res.data;
+      // Handle different response formats
+      if (Array.isArray(res.data)) return res.data;
+      if (res.data?.conversations) return res.data.conversations;
+      if (res.data?.data) return res.data.data;
+      return [];
     },
   });
 
-  // Get connections for starting new chats
+  // ✅ FIX: Get connections with proper data handling
   const { data: connections } = useQuery({
     queryKey: ["connections"],
     queryFn: async () => {
       const res = await axiosInstance.get("/connections");
-      return res.data;
+      // Handle different response formats
+      if (Array.isArray(res.data)) return res.data;
+      if (res.data?.connections) return res.data.connections;
+      if (res.data?.data) return res.data.data;
+      return [];
     },
   });
 
@@ -58,7 +65,7 @@ const MessagingPage = () => {
     socket.on("receive-message", (message) => {
       setMessages((prev) => [...prev, message]);
       scrollToBottom();
-      refetchConversations(); // Update conversation list
+      refetchConversations();
     });
 
     socket.on("user-typing", ({ senderId }) => {
@@ -109,10 +116,12 @@ const MessagingPage = () => {
   const loadMessages = async () => {
     try {
       const res = await axiosInstance.get(`/messages/${selectedUser._id}`);
-      setMessages(res.data);
+      // Ensure messages is always an array
+      setMessages(Array.isArray(res.data) ? res.data : []);
       scrollToBottom();
     } catch (error) {
       console.error("Error loading messages:", error);
+      setMessages([]);
     }
   };
 
@@ -127,13 +136,11 @@ const MessagingPage = () => {
     if (!newMessage.trim() || !selectedUser) return;
 
     try {
-      // Save to database
       await axiosInstance.post("/messages/send", {
         receiverId: selectedUser._id,
         message: newMessage,
       });
 
-      // Emit via socket for real-time delivery
       socket.emit("send-message", {
         senderId: authUser._id,
         receiverId: selectedUser._id,
@@ -142,7 +149,7 @@ const MessagingPage = () => {
 
       setNewMessage("");
       handleStopTyping();
-      refetchConversations(); // Update conversation list
+      refetchConversations();
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -189,17 +196,17 @@ const MessagingPage = () => {
     });
   };
 
-  // Filter connections for search
-  const filteredConnections = connections?.filter((conn) =>
-    conn.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // ✅ FIX: Filter connections with Array safety check
+  const filteredConnections = Array.isArray(connections)
+    ? connections.filter((conn) =>
+        conn.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-y-hidden">
-
       {/* Conversations List */}
       <div className="w-1/4 bg-white border-r flex-shrink-0">
-
         <div className="p-4 border-b">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl font-semibold">Messages</h2>
@@ -212,7 +219,7 @@ const MessagingPage = () => {
           </div>
         </div>
         <div>
-          {conversations?.length === 0 ? (
+          {!conversations || conversations.length === 0 ? (
             <div className="p-4 text-center text-gray-500">
               <p>No conversations yet</p>
               <button
@@ -223,7 +230,7 @@ const MessagingPage = () => {
               </button>
             </div>
           ) : (
-            conversations?.map((conv) => (
+            conversations.map((conv) => (
               <div
                 key={conv.user._id}
                 onClick={() => setSelectedUser(conv.user)}
@@ -273,8 +280,7 @@ const MessagingPage = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-6 bg-gray-50">
-
+            <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
               {messages.length === 0 ? (
                 <div className="text-center text-gray-500 mt-10">
                   <p>No messages yet. Start the conversation!</p>
@@ -405,16 +411,15 @@ const MessagingPage = () => {
               </div>
             </div>
 
-            <div className="flex-1">
-
-              {filteredConnections?.length === 0 ? (
+            <div className="flex-1 overflow-y-auto">
+              {filteredConnections.length === 0 ? (
                 <div className="p-4 text-center text-gray-500">
                   {searchQuery
                     ? "No connections found"
                     : "No connections yet. Connect with people to start chatting!"}
                 </div>
               ) : (
-                filteredConnections?.map((connection) => (
+                filteredConnections.map((connection) => (
                   <div
                     key={connection._id}
                     onClick={() => handleStartNewChat(connection)}
