@@ -7,7 +7,7 @@ import { X, Search } from "lucide-react";
 
 // Initialize socket connection
 // ✅ MessagingPage.jsx (Fixed socket config)
-import io from "socket.io-client";
+
 
 // Choose the correct backend URL based on environment
 const SOCKET_URL =
