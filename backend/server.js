@@ -39,7 +39,7 @@ const server = http.createServer(app);
 // ✅ Configure allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://linked-in-frontend-six.vercel.app", // your Vercel frontend
+  "https://linked-in-7n9i.vercel.app", // your Vercel frontend
 ];
 
 // ✅ Socket.IO setup
@@ -47,7 +47,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "https://linked-in-frontend-six.vercel.app", // ✅ Match exactly
+      "https://linked-in-7n9i.vercel.app", // ✅ Match exactly
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -145,7 +145,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://linked-in-frontend-six.vercel.app", // ✅ NO trailing slash
+      "https://linked-in-7n9i.vercel.app", // ✅ NO trailing slash
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // ✅ Essential for cookies
