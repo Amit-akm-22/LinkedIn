@@ -57,7 +57,9 @@ const Navbar = () => {
   });
 
   // Calculate unread notifications count
+
   const unreadNotificationsCount = notifications?.filter(n => !n.read).length || 0;
+
   const unreadConnectionRequestsCount = connectionRequests?.length || 0;
 
   return (
