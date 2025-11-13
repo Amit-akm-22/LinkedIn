@@ -7,13 +7,25 @@ import Sidebar from "../components/Sidebar";
 import { formatDistanceToNow } from "date-fns";
 
 const NotificationsPage = () => {
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-
 	const queryClient = useQueryClient();
 
+	// ✅ FIX 1: Correct endpoint and always return data
+	const { data: authUser } = useQuery({
+		queryKey: ["authUser"],
+		queryFn: async () => {
+			const res = await axiosInstance.get("/auth/me"); // fixed endpoint
+			return res.data; // return actual user object
+		},
+		retry: false,
+	});
+
+	// ✅ FIX 2: Return .data for notifications
 	const { data: notifications, isLoading } = useQuery({
 		queryKey: ["notifications"],
-		queryFn: () => axiosInstance.get("/notifications"),
+		queryFn: async () => {
+			const res = await axiosInstance.get("/notifications");
+			return res.data; // return only data, not entire response
+		},
 	});
 
 	const { mutate: markAsReadMutation } = useMutation({
@@ -35,7 +47,6 @@ const NotificationsPage = () => {
 		switch (type) {
 			case "like":
 				return <ThumbsUp className='text-blue-500' />;
-
 			case "comment":
 				return <MessageSquare className='text-green-500' />;
 			case "connectionAccepted":
@@ -106,9 +117,9 @@ const NotificationsPage = () => {
 
 					{isLoading ? (
 						<p>Loading notifications...</p>
-					) : notifications && notifications.data.length > 0 ? (
+					) : notifications && notifications.length > 0 ? ( // ✅ FIX 3: .length on data
 						<ul>
-							{notifications.data.map((notification) => (
+							{notifications.map((notification) => (
 								<li
 									key={notification._id}
 									className={`bg-white border rounded-lg p-4 my-4 transition-all hover:shadow-md ${
@@ -172,4 +183,6 @@ const NotificationsPage = () => {
 		</div>
 	);
 };
+
 export default NotificationsPage;
+
