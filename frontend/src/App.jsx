@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
@@ -12,28 +12,48 @@ import JobsPage from "./pages/JobsPage";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
 
 function App() {
-  // ✅ Check if user is authenticated
-  const { data: authUser, isLoading } = useQuery({
+  const location = useLocation();
+  
+  // ✅ Check if user is authenticated with better error handling
+  const { data: authUser, isLoading, error } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
         const res = await axiosInstance.get("/auth/me");
         return res.data;
       } catch (err) {
-        // If error (401), user is not authenticated
+        // Only log actual errors, not 401 (which is expected when not logged in)
+        if (err.response?.status !== 401) {
+          console.error("Auth check error:", err);
+        }
         return null;
       }
     },
     retry: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   });
+
+  // ✅ Debug logging (remove in production)
+  useEffect(() => {
+    console.log("🔍 Auth Status:", {
+      isLoading,
+      authUser: authUser ? "Logged in" : "Not logged in",
+      currentPath: location.pathname,
+    });
+  }, [authUser, isLoading, location.pathname]);
 
   // Show loading spinner while checking auth
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -65,14 +85,37 @@ function App() {
           <Route path="jobs" element={<JobsPage />} />
         </Route>
 
-        {/* Catch all - redirect to home or login */}
+        {/* Catch all - redirect to home or login based on auth status */}
         <Route
           path="*"
           element={<Navigate to={authUser ? "/" : "/login"} replace />}
         />
       </Routes>
-
-      <Toaster position="top-center" />
+      
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
     </>
   );
 }
