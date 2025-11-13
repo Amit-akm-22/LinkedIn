@@ -21,12 +21,12 @@ const NotificationsPage = () => {
 
 	// ✅ FIX 2: Return .data for notifications
 	const { data: notifications, isLoading } = useQuery({
-		queryKey: ["notifications"],
-		queryFn: async () => {
-			const res = await axiosInstance.get("/notifications");
-			return res.data; // return only data, not entire response
-		},
-	});
+  queryKey: ["notifications"],
+  queryFn: async () => {
+    const res = await axiosInstance.get("/notifications");
+    return res.data;
+  },
+});
 
 	const { mutate: markAsReadMutation } = useMutation({
 		mutationFn: (id) => axiosInstance.put(`/notifications/${id}/read`),
