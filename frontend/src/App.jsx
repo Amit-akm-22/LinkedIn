@@ -63,10 +63,6 @@ function App() {
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="messaging" element={<MessagingPage />} />
           <Route path="jobs" element={<JobsPage />} />
-          <Route path="jobs/:id" element={<JobDetailsPage />} />
-          <Route path="jobs/post" element={<PostJobPage />} />
-          <Route path="my-applications" element={<ApplicationsPage />} />
-          <Route path="my-posted-jobs" element={<MyPostedJobsPage />} />
         </Route>
 
         {/* Catch all - redirect to home or login */}
