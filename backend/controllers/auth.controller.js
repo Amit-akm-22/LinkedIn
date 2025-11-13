@@ -99,9 +99,22 @@ export const login = async (req, res) => {
   }
 };
 // LOGOUT
+// LOGOUT - Fixed version for auth.controller.js
 export const logout = (req, res) => {
-  res.clearCookie("jwt-linkedin");
-  res.json({ message: "Logged out successfully" });
+  try {
+    // ✅ Clear cookie with the SAME options used when setting it
+    res.clearCookie("jwt-linkedin", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      path: "/" // Important: specify path
+    });
+    
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error in logout:", error);
+    res.status(500).json({ message: "Server error during logout" });
+  }
 };
 
 // CURRENT USER
