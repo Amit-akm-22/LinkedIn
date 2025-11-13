@@ -40,13 +40,14 @@ export const signup = async (req, res) => {
     // Create JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "3d" });
 
-    // Set cookie (matches what middleware expects)
+    
+
     res.cookie("jwt-linkedin", token, {
-      httpOnly: true,
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    });
+  httpOnly: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  sameSite: "none", // ✅ Required for cross-origin
+  secure: true, // ✅ Required for production (HTTPS)
+});
 
     // Send response WITHOUT token in body
     res.status(201).json({
@@ -67,6 +68,7 @@ export const signup = async (req, res) => {
   }
 };
 
+
 // LOGIN
 export const login = async (req, res) => {
   try {
@@ -80,30 +82,22 @@ export const login = async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "3d" });
 
-    // Set cookie (matches what middleware expects)
+    // ✅ Fixed cookie settings for cross-origin
     res.cookie("jwt-linkedin", token, {
       httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none", // ✅ Required for Vercel + Render
+      secure: true, // ✅ Always true for production
     });
 
-    // Send response WITHOUT token in body
     res.json({
       message: "Logged in successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-      },
     });
   } catch (error) {
     console.error("Error in login controller:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // LOGOUT
 export const logout = (req, res) => {
   res.clearCookie("jwt-linkedin");
@@ -111,9 +105,20 @@ export const logout = (req, res) => {
 };
 
 // CURRENT USER
+
+// CURRENT USER
 export const getCurrentUser = async (req, res) => {
   try {
-    res.json(req.user);
+    // ✅ Fetch user with connections populated
+    const user = await User.findById(req.user._id)
+      .select("-password") // Exclude password
+      .populate("connections", "name username profilePicture headline"); // Populate connections
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
   } catch (error) {
     console.error("Error in getCurrentUser:", error);
     res.status(500).json({ message: "Server error" });
