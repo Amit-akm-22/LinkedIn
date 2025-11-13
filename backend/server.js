@@ -140,14 +140,15 @@ io.on("connection", (socket) => {
 app.set("io", io);
 
 // ✅ CORS middleware
+
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // For local testing
-      "https://linked-in-frontend-six.vercel.app", // ✅ Your Vercel frontend
+      "http://localhost:5173",
+      "https://linked-in-frontend-six.vercel.app", // ✅ NO trailing slash
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: true, // ✅ Essential for cookies
   })
 );
 
@@ -183,6 +184,3 @@ server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   connectDB();
 });
-
-
-
