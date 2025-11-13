@@ -2,24 +2,21 @@
 import { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
-import io from "socket.io-client";
+import io from "socket.io-client"; // ✅ Keep only this import
 import { X, Search } from "lucide-react";
 
-// Initialize socket connection
-// ✅ MessagingPage.jsx (Fixed socket config)
-
-
-// Choose the correct backend URL based on environment
+// ✅ Choose the correct backend URL based on environment
 const SOCKET_URL =
   window.location.hostname === "localhost"
-    ? "http://localhost:5000" // local development
-    : "https://linkedin-backend-k3cs.onrender.com"; // Render backend
+    ? "http://localhost:5000"
+    : "https://linkedin-backend-k3cs.onrender.com";
 
-
-const socket = io("https://linkedin-backend-k3cs.onrender.com", {
+// ✅ Initialize socket connection once
+const socket = io(SOCKET_URL, {
   withCredentials: true,
-  transports: ["websocket", "polling"]
+  transports: ["websocket", "polling"],
 });
+
 
 const MessagingPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
