@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   Bell, 
   Home, 
@@ -9,22 +9,19 @@ import {
   Users, 
   MessageSquare, 
   Briefcase, 
-  Search, 
-  Plus,
-  FileText,
-  List
+  Search
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  // ✅ FIX: Return res.data and handle different response formats
   const { data: notifications } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => {
       const res = await axiosInstance.get("/notifications");
-      // Handle different response formats
       if (Array.isArray(res.data)) return res.data;
       if (res.data?.notifications) return res.data.notifications;
       if (res.data?.data) return res.data.data;
@@ -33,12 +30,10 @@ const Navbar = () => {
     enabled: !!authUser,
   });
 
-  // ✅ FIX: Same fix for connectionRequests
   const { data: connectionRequests } = useQuery({
     queryKey: ["connectionRequests"],
     queryFn: async () => {
       const res = await axiosInstance.get("/connections/requests");
-      // Handle different response formats
       if (Array.isArray(res.data)) return res.data;
       if (res.data?.requests) return res.data.requests;
       if (res.data?.data) return res.data.data;
@@ -47,14 +42,28 @@ const Navbar = () => {
     enabled: !!authUser,
   });
 
-  const { mutate: logout } = useMutation({
-    mutationFn: () => axiosInstance.post("/auth/logout"),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+  // ✅ FIXED: Proper logout with navigation and cache clearing
+  const { mutate: logout, isLoading: isLoggingOut } = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.post("/auth/logout");
+      return res.data;
     },
+    onSuccess: () => {
+      // Clear all cached data
+      queryClient.setQueryData(["authUser"], null);
+      queryClient.clear(); // Clear all queries
+      
+      toast.success("Logged out successfully");
+      
+      // Navigate to login page
+      navigate("/login", { replace: true });
+    },
+    onError: (error) => {
+      console.error("Logout error:", error);
+      toast.error("Failed to logout. Please try again.");
+    }
   });
 
-  // ✅ Calculate unread counts with safety checks
   const unreadNotificationsCount = Array.isArray(notifications) 
     ? notifications.filter(n => !n.read).length 
     : 0;
@@ -64,7 +73,6 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white/80 backdrop-blur-xl shadow-lg border-b-2 border-white/50 sticky top-0 z-50 relative">
-      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-transparent to-indigo-50/30 pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -72,11 +80,8 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                {/* Outer glow effect */}
                 <div className="absolute inset-0 bg-blue-500 rounded-md blur-md opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
-                {/* Main logo container - LinkedIn Blue #0A66C2 */}
                 <div className="relative w-9 h-9 bg-[#0A66C2] rounded-md flex items-center justify-center shadow-xl transform group-hover:scale-110 transition-all duration-300">
-                  {/* LinkedIn 'in' logo - exact proportions */}
                   <span className="text-white font-bold text-[22px] leading-none" style={{ fontFamily: 'Arial, sans-serif' }}>
                     in
                   </span>
@@ -148,10 +153,13 @@ const Navbar = () => {
                 
                 <button
                   onClick={() => logout()}
-                  className="flex items-center space-x-1.5 text-sm text-gray-600 hover:text-red-600 transition-all duration-300 px-3 py-2 rounded-xl hover:bg-red-50/50 group font-medium"
+                  disabled={isLoggingOut}
+                  className="flex items-center space-x-1.5 text-sm text-gray-600 hover:text-red-600 transition-all duration-300 px-3 py-2 rounded-xl hover:bg-red-50/50 group font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="hidden md:inline">Logout</span>
+                  <span className="hidden md:inline">
+                    {isLoggingOut ? "Logging out..." : "Logout"}
+                  </span>
                 </button>
               </>
             ) : (
