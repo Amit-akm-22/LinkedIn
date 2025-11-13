@@ -8,7 +8,14 @@ import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
 import MessagingPage from "./pages/MessagingPage";
+
+// ✅ Job-related page imports
 import JobsPage from "./pages/JobsPage";
+import JobDetailsPage from "./pages/JobDetailsPage";
+import PostJobPage from "./pages/PostJobPage";
+import MyPostedJobsPage from "./pages/MyPostedJobsPage";
+import ApplicationsPage from "./pages/ApplicationPage";
+
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
 import { Toaster } from "react-hot-toast";
@@ -82,7 +89,13 @@ function App() {
           <Route path="post/:postId" element={<PostPage />} />
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="messaging" element={<MessagingPage />} />
+          
+          {/* ✅ Job Routes */}
           <Route path="jobs" element={<JobsPage />} />
+          <Route path="jobs/:id" element={<JobDetailsPage />} />
+          <Route path="jobs/post" element={<PostJobPage />} />
+          <Route path="my-applications" element={<ApplicationsPage />} />
+          <Route path="my-posted-jobs" element={<MyPostedJobsPage />} />
         </Route>
 
         {/* Catch all - redirect to home or login based on auth status */}
