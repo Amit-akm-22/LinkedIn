@@ -19,12 +19,11 @@ const Navbar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
 
-  // ✅ FIX: Return res.data instead of the full response
+  // ✅ FIX: Return res.data and handle different response formats
   const { data: notifications } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => {
       const res = await axiosInstance.get("/notifications");
-      console.log("Notifications response:", res.data); // Debug log
       // Handle different response formats
       if (Array.isArray(res.data)) return res.data;
       if (res.data?.notifications) return res.data.notifications;
@@ -39,7 +38,6 @@ const Navbar = () => {
     queryKey: ["connectionRequests"],
     queryFn: async () => {
       const res = await axiosInstance.get("/connections/requests");
-      console.log("Connection requests response:", res.data); // Debug log
       // Handle different response formats
       if (Array.isArray(res.data)) return res.data;
       if (res.data?.requests) return res.data.requests;
@@ -56,11 +54,13 @@ const Navbar = () => {
     },
   });
 
-  // Calculate unread notifications count
-
-  const unreadNotificationsCount = notifications?.filter(n => !n.read).length || 0;
-
-  const unreadConnectionRequestsCount = connectionRequests?.length || 0;
+  // ✅ Calculate unread counts with safety checks
+  const unreadNotificationsCount = Array.isArray(notifications) 
+    ? notifications.filter(n => !n.read).length 
+    : 0;
+  const unreadConnectionRequestsCount = Array.isArray(connectionRequests) 
+    ? connectionRequests.length 
+    : 0;
 
   return (
     <nav className="bg-white/80 backdrop-blur-xl shadow-lg border-b-2 border-white/50 sticky top-0 z-50 relative">
@@ -132,9 +132,9 @@ const Navbar = () => {
                 <Link to="/notifications" className="flex flex-col items-center text-gray-600 hover:text-blue-600 group transition-all duration-300 relative px-3 py-2 rounded-xl hover:bg-blue-50/50">
                   <Bell className="h-5 w-5 group-hover:scale-110 transition-transform duration-300 group-hover:rotate-12" />
                   <span className="text-xs mt-1 hidden md:block font-medium">Notifications</span>
-                  {unreadNotificationCount > 0 && (
+                  {unreadNotificationsCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full size-5 flex items-center justify-center font-bold shadow-lg animate-pulse">
-                      {unreadNotificationCount}
+                      {unreadNotificationsCount}
                     </span>
                   )}
                 </Link>
@@ -175,9 +175,6 @@ const Navbar = () => {
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
                 </Link>
-
-
-
               </>
             )}
           </div>
