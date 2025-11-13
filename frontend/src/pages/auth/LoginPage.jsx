@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,22 +10,24 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const queryClient = useQueryClient();
+  const navigate = useNavigate(); // ✅ Use navigate instead of window.location
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      await axiosInstance.post("/auth/login", { username, password });
+      const res = await axiosInstance.post("/auth/login", { username, password });
       
-      // Cookie is automatically set by the backend
-      // Invalidate auth query to refetch user data
+      // ✅ Invalidate auth query to refetch user data
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
       
       toast.success("Logged in successfully!");
-      window.location.href = "/";
+      
+      // ✅ Use navigate instead of window.location
+      navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       toast.error(err.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
@@ -152,6 +155,7 @@ const LoginForm = () => {
 
 const LoginPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate(); // ✅ Add navigate here too
 
   const promotionalContent = [
     {
@@ -279,7 +283,7 @@ const LoginPage = () => {
             </div>
 
             <button
-              onClick={() => (window.location.href = "/signup")}
+              onClick={() => navigate("/signup")} // ✅ Use navigate instead
               className="w-full flex justify-center items-center py-2.5 px-4 border-2 border-blue-600 rounded-xl 
                 text-sm font-bold text-blue-600 bg-transparent hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50
                 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300 
