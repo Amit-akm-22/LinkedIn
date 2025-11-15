@@ -1,166 +1,140 @@
-LinkedIn Clone 💼✨
+# Wonderlust 🌍✨
+
+Project Link: https://wonderlust-akm-1.onrender.com/listings
+
+![Screenshot 2025-04-03 010427](https://github.com/user-attachments/assets/2a52c83f-70ac-4c1e-ba37-a7026184bfd8)
+
+## A Complete Accommodation Booking Platform
+
+Wonderlust is a comprehensive accommodation booking platform that connects travelers with unique places to stay around the world. From cozy rooms to luxury villas, city apartments to countryside retreats - find the perfect place for your next adventure.
+
+## Table of Contents
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+### For Travelers 🧳
+- **Discover** 🔍 - Browse thousands of unique properties worldwide with advanced filtering options
+- **Search** 🗺️ - Find accommodations by location, dates, price range, amenities, and property type
+- **Book** 📅 - Secure instant booking with flexible cancellation options
+- **Pay** 💳 - Multiple payment methods with secure transaction processing
+- **Review** ⭐ - Share experiences with ratings and detailed reviews
+- **Save** ❤️ - Create wishlists of favorite properties for future trips
+- **Messaging** 💬 - Direct communication with hosts before and during your stay
+- **Experience Booking** 🏄‍♂️ - Discover and book local experiences, tours, and activities
+
+### For Hosts 🏠
+- **List Property** 📝 - Create detailed listings with descriptions, amenities, house rules, and pricing
+- **Photo Management** 📷 - Upload high-quality photos with automatic enhancement features
+- **Calendar Management** 📆 - Set availability, create custom pricing for seasons/events
+- **Booking Management** 📊 - Accept/decline booking requests, manage reservations
+- **Messaging Center** 📨 - Communicate with guests through the integrated messaging system
+- **Analytics Dashboard** 📈 - Track performance, views, bookings, and earnings
+- **Multi-property Management** 🏘️ - Manage multiple listings from a single account
+- **Smart Pricing** 💲 - Get pricing suggestions based on demand, location, and seasons
+
+### Platform Features 🚀
+- **User Authentication** 🔐 - Secure login/signup with email or social media accounts
+- **Profile Management** 👤 - Detailed user profiles with verification options
+- **Notification System** 🔔 - Real-time alerts for bookings, messages, and updates
+- **Multi-language Support** 🌐 - Platform available in multiple languages
+- **Responsive Design** 📱 - Seamless experience across all devices (desktop, tablet, mobile)
+- **Review System** ✍️ - Two-way review system for hosts and guests
+- **Secure Payments** 🔒 - Protected payment processing with multiple currency support
+- **Admin Dashboard** ⚙️ - Complete management tools for platform administrators
+
+## Technology Stack
+
+### Frontend 🎨
+- **EJS (Embedded JavaScript)** - Template engine for dynamic content rendering
+- **HTML5/CSS3** - Structure and styling with responsive design
+- **JavaScript** - Client-side functionality and interactions
+- **Bootstrap** - Responsive layout framework
+- **AJAX** - Asynchronous data loading for smooth user experience
+- **Mapbox API** - For location visualization and property mapping
+
+### Backend 🛠️
+- **Node.js** - JavaScript runtime environment
+- **Express.js** - Web application framework
+- **MongoDB** - NoSQL database for flexible data storage
+- **Mongoose** - MongoDB object modeling for Node.js
+- **Passport.js** - Authentication middleware
+- **Multer** - File upload handling (for property images)
 
 
-Project Link: https://your-deployed-link-here.vercel.app
-Show Image
-A Full-Stack Professional Networking Platform
-A comprehensive LinkedIn clone that enables professionals to connect, share content, discover opportunities, and grow their careers. Built with modern technologies to provide a seamless social networking experience for professionals worldwide.
-Table of Contents
 
-Features
-Technology Stack
-Installation
-Project Structure
-API Documentation
-Contributing
-License
+## Installation 💻
 
-Features
-For Professionals 👨‍💼👩‍💼
-
-Profile Management 👤 - Create and customize professional profiles with work experience, education, skills, and achievements
-Networking 🤝 - Connect with professionals, send connection requests, and build your network
-Content Sharing 📝 - Create posts with text and images to share insights, updates, and professional content
-Engagement 💬 - Like, comment, and interact with posts from your network
-Notifications 🔔 - Real-time notifications for likes, comments, connection requests, and messages
-Messaging 💬 - Real-time chat with connections using Socket.IO
-Job Search 🔍 - Browse and search job opportunities with advanced filtering
-Job Applications 📄 - Apply for jobs with resume upload and cover letter
-Recommendations 🌟 - Get personalized job and connection recommendations
-
-For Recruiters & Companies 🏢
-
-Job Posting 📢 - Create detailed job listings with requirements, responsibilities, and benefits
-Application Management 📊 - Review applications, manage candidates, and track hiring process
-Company Pages 🏛️ - Showcase company culture, values, and opportunities
-Candidate Search 🔎 - Find and reach out to potential candidates
-Analytics Dashboard 📈 - Track job post performance, views, and application metrics
-
-Platform Features 🚀
-
-Authentication & Authorization 🔐 - Secure JWT-based authentication with role-based access control
-Real-time Updates ⚡ - Live notifications and messaging powered by Socket.IO
-Responsive Design 📱 - Fully responsive UI that works seamlessly on desktop, tablet, and mobile
-Image Upload 📷 - Profile pictures, post images, and company logos with Cloudinary integration
-Search Functionality 🔍 - Search for people, jobs, companies, and content
-Feed Algorithm 🎯 - Personalized content feed based on connections and interests
-Privacy Controls 🔒 - Control who can see your profile, posts, and connection list
-
-Technology Stack
-Frontend 🎨
-
-React 18 ⚛️ - Modern UI library with hooks and functional components
-React Router DOM 🛣️ - Client-side routing for seamless navigation
-TanStack Query (React Query) 🔄 - Powerful data fetching and state management
-Tailwind CSS 🎨 - Utility-first CSS framework for rapid UI development
-Lucide React 🎭 - Beautiful, consistent icon library
-Axios 🌐 - HTTP client for API requests
-React Hot Toast 🍞 - Elegant notification system
-Socket.IO Client 🔌 - Real-time bidirectional communication
-Date-fns 📅 - Modern date utility library
-Vite ⚡ - Next-generation frontend build tool
-
-Backend 🛠️
-
-Node.js 🟢 - JavaScript runtime environment
-Express.js 🚂 - Fast, unopinionated web framework
-MongoDB 🍃 - NoSQL database for flexible data storage
-Mongoose 🦫 - MongoDB object modeling for Node.js
-JWT 🎫 - JSON Web Tokens for secure authentication
-Socket.IO 🔌 - Real-time communication engine
-Cloudinary ☁️ - Image and media management
-Multer 📤 - File upload handling middleware
-Bcrypt 🔐 - Password hashing and encryption
-Cookie Parser 🍪 - Cookie parsing middleware
-CORS 🌍 - Cross-Origin Resource Sharing configuration
-Dotenv 🔧 - Environment variable management
-
-DevOps & Deployment 🚀
-
-Vercel ▲ - Frontend deployment and hosting
-Render 🎨 - Backend API deployment
-MongoDB Atlas 🗄️ - Cloud database hosting
-Git & GitHub 🐙 - Version control and collaboration
-
-Installation 💻
 Follow these steps to set up the project locally:
-Prerequisites
 
-Node.js (v16 or higher) 🟢
-MongoDB (local or Atlas) 🍃
-NPM or Yarn 📦
-Cloudinary Account ☁️
-
-Backend Setup
-bash# Clone the repository
-git clone https://github.com/yourusername/linkedin-clone.git
-cd linkedin-clone/backend
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/wonderlust.git
+cd wonderlust
 
 # Install dependencies
 npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your configuration:
-# - MONGODB_URI
-# - JWT_SECRET
-# - CLOUDINARY credentials
-# - PORT
+# Edit .env with your configuration
+
+# Seed the database (optional)
+npm run seed
 
 # Start the development server
 npm run dev
-Frontend Setup
-bash# Navigate to frontend directory
-cd ../frontend
+```
 
-# Install dependencies
-npm install
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB (local or Atlas)
+- NPM or Yarn
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your backend API URL
+## Project Structure 📁
 
-# Start the development server
-npm run dev
-Environment Variables 🔧
-Backend (.env)
-envPORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-NODE_ENV=development
-Frontend (.env)
-envVITE_API_URL=http://localhost:5000/api/v1
-Project Structure 📁
-linkedin-clone/
-├── backend/
-│   ├── controllers/        # Route controllers
-│   ├── middleware/         # Custom middleware (auth, error handling)
-│   ├── models/             # Mongoose models
-│   ├── routes/             # API routes
-│   ├── lib/                # Utility functions (db, cloudinary)
-│   ├── uploads/            # Temporary file storage
-│   ├── server.js           # Server entry point
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Reusable React components
-│   │   │   ├── auth/       # Authentication components
-│   │   │   ├── layout/     # Layout components (Navbar, Sidebar)
-│   │   │   └── ui/         # UI components
-│   │   ├── pages/          # Page components
-│   │   │   ├── auth/       # Login, Signup pages
-│   │   │   └── ...         # Other pages
-│   │   ├── lib/            # Utility libraries (axios, etc.)
-│   │   ├── App.jsx         # Main app component
-│   │   ├── main.jsx        # React entry point
-│   │   └── index.css       # Global styles
-│   ├── public/             # Static assets
-│   ├── index.html
-│   ├── vite.config.js      # Vite configuration
-│   └── package.json
-│
-└── README.md
+```
+wonderlust/
+├── config/             # Configuration files
+├── controllers/        # Route controllers
+├── middleware/         # Custom middleware
+├── models/             # MongoDB/Mongoose models
+├── public/             # Static files (CSS, JS, images)
+├── routes/             # API and view routes
+├── utils/              # Utility functions
+├── views/              # EJS templates
+├── tests/              # Test files
+├── app.js              # Express app setup
+├── server.js           # Server entry point
+└── package.json        # Project metadata and dependencies
+```
+
+
+## Database Models 💾
+
+### User Model 👤
+- Basic profile (name, email, password)
+- Advanced profile (bio, profile picture, verification status)
+- Account settings (notifications, privacy settings)
+- Host/guest preferences
+
+### Listing Model 🏠
+- Basic details (title, description, property type)
+- Location data (address, coordinates, neighborhood)
+- Amenities and features
+- Photos and media
+- Pricing and availability
+- House rules and policies
+
+### Booking Model 🗓️
+- Reservation details (dates, guests)
+- Payment information
+- Status tracking
+- Guest/host communication
+- Reviews and ratings
