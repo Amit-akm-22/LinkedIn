@@ -1,21 +1,21 @@
-# Wonderlust 🌍✨
+# LinkedIn Clone 💼✨
 
 Project Link: https://wonderlust-akm-1.onrender.com/listings
 
 ![Screenshot 2025-04-03 010427](https://github.com/user-attachments/assets/2a52c83f-70ac-4c1e-ba37-a7026184bfd8)
 
-## A Complete Accommodation Booking Platform
+## A Full-Stack Professional Networking Platform
 
-Wonderlust is a comprehensive accommodation booking platform that connects travelers with unique places to stay around the world. From cozy rooms to luxury villas, city apartments to countryside retreats - find the perfect place for your next adventure.
+A comprehensive LinkedIn clone that enables professionals to connect, share content, discover opportunities, and grow their careers. Built with modern technologies to provide a seamless social networking experience for professionals worldwide.
 
 ## Table of Contents
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Project Structure](#project-structure)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
+Features
+Technology Stack
+Installation
+Project Structure
+API Documentation
+Contributing
+License
 
 ## Features
 
@@ -100,19 +100,36 @@ npm run dev
 ## Project Structure 📁
 
 ```
-wonderlust/
-├── config/             # Configuration files
-├── controllers/        # Route controllers
-├── middleware/         # Custom middleware
-├── models/             # MongoDB/Mongoose models
-├── public/             # Static files (CSS, JS, images)
-├── routes/             # API and view routes
-├── utils/              # Utility functions
-├── views/              # EJS templates
-├── tests/              # Test files
-├── app.js              # Express app setup
-├── server.js           # Server entry point
-└── package.json        # Project metadata and dependencies
+linkedin-clone/
+├── backend/
+│   ├── controllers/        # Route controllers
+│   ├── middleware/         # Custom middleware (auth, error handling)
+│   ├── models/             # Mongoose models
+│   ├── routes/             # API routes
+│   ├── lib/                # Utility functions (db, cloudinary)
+│   ├── uploads/            # Temporary file storage
+│   ├── server.js           # Server entry point
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # Reusable React components
+│   │   │   ├── auth/       # Authentication components
+│   │   │   ├── layout/     # Layout components (Navbar, Sidebar)
+│   │   │   └── ui/         # UI components
+│   │   ├── pages/          # Page components
+│   │   │   ├── auth/       # Login, Signup pages
+│   │   │   └── ...         # Other pages
+│   │   ├── lib/            # Utility libraries (axios, etc.)
+│   │   ├── App.jsx         # Main app component
+│   │   ├── main.jsx        # React entry point
+│   │   └── index.css       # Global styles
+│   ├── public/             # Static assets
+│   ├── index.html
+│   ├── vite.config.js      # Vite configuration
+│   └── package.json
+│
+└── README.md
 ```
 
 
