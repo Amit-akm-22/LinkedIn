@@ -1,6 +1,9 @@
 # LinkedIn Clone 💼✨
 
-Project Link: https://wonderlust-akm-1.onrender.com/listings
+Project Link: https://linked-in-frontend-2026.vercel.app/login
+
+
+
 
 
 ![Screenshot 2025-11-15 094130](https://raw.githubusercontent.com/Amit-akm-22/LinkedIn/main/Screenshot%202025-11-15%20094130.png)
