@@ -1,8 +1,8 @@
 LinkedIn Clone 💼✨
 
 
-Project Link: https://linked-in-frontend-2026.vercel.app/login
-
+Project Link: https://your-deployed-link-here.vercel.app
+Show Image
 A Full-Stack Professional Networking Platform
 A comprehensive LinkedIn clone that enables professionals to connect, share content, discover opportunities, and grow their careers. Built with modern technologies to provide a seamless social networking experience for professionals worldwide.
 Table of Contents
@@ -164,16 +164,3 @@ linkedin-clone/
 │   └── package.json
 │
 └── README.md
-
-Acknowledgments 🙏
-
-LinkedIn for design inspiration
-The React and Node.js communities
-All contributors and supporters
-
-Contact 📧
-Your Name - @yourtwitter
-Project Link: https://github.com/yourusername/linkedin-clone
-
-⭐ Star this repo if you find it helpful!
-Made with ❤️ and ☕
