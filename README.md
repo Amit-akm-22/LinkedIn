@@ -3,7 +3,7 @@
 Project Link: https://wonderlust-akm-1.onrender.com/listings
 
 
-![Screenshot 2025-11-15 094130](https://github.com/user-attachments/assets/2a52c83f-70ac-4c1e-ba37-a7026184bfd8)
+![Screenshot 2025-11-15 094130](https://raw.githubusercontent.com/Amit-akm-22/LinkedIn/main/Screenshot%202025-11-15%20094130.png)
 
 ## A Full-Stack Professional Networking Platform
 
